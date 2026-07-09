@@ -1,0 +1,28 @@
+name: Robot Auto Bet261
+
+on:
+  schedule:
+    # Ce code dit à GitHub de lancer le robot toutes les 15 minutes
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Cette ligne magique te permet de lancer le robot manuellement en 1 clic
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installation des packages
+        run: npm install
+
+      - name: Lancement du Robot Scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: node index.js
